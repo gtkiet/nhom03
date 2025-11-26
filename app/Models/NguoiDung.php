@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class NguoiDung extends Model
+class NguoiDung extends Authenticatable
 {
     protected $table = 'nguoi_dung';
+
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'ho_ten',
@@ -19,6 +21,12 @@ class NguoiDung extends Model
     protected $hidden = [
         'mat_khau'
     ];
+
+    // Chỉ định field mật khẩu
+    public function getAuthPassword()
+    {
+        return $this->mat_khau;
+    }
 
     // 1 user -> 1 sinh viên (nếu vai trò là sinh viên)
     public function sinhVien()
