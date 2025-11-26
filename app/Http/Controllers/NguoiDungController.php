@@ -16,7 +16,7 @@ class NguoiDungController extends Controller
             return $query->where('ho_ten', 'LIKE', "%{$keyword}%")
                 ->orWhere('email', 'LIKE', "%{$keyword}%");
         })
-            ->orderBy('id', 'DESC')
+            ->orderBy('id', 'ASC')
             ->paginate(10)
             ->withQueryString();
         return view('nguoi_dung.index', compact('nguoiDung'));

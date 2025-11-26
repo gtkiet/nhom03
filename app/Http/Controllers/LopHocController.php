@@ -7,11 +7,22 @@ use Illuminate\Http\Request;
 
 class LopHocController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = LopHoc::paginate(10);
-        return view('lop_hoc.index', compact('data'));
+        $query = LopHoc::query();
+
+        if ($request->keyword) {
+            $query->where('ma_lop', 'like', "%{$request->keyword}%")
+                ->orWhere('ten_lop', 'like', "%{$request->keyword}%");
+        }
+
+        $lopHoc = $query->orderBy('id', 'ASC')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('lop_hoc.index', compact('lopHoc'));
     }
+
 
     public function create()
     {
