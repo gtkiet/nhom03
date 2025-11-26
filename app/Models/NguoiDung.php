@@ -16,6 +16,10 @@ class NguoiDung extends Model
         'trang_thai',
     ];
 
+    protected $hidden = [
+        'mat_khau'
+    ];
+
     // 1 user -> 1 sinh viên (nếu vai trò là sinh viên)
     public function sinhVien()
     {

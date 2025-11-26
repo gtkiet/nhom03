@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\NguoiDung;
-use Illuminate\Http\Request;
+use App\Http\Requests\NguoiDungRequest;
 
 class NguoiDungController extends Controller
 {
     public function index()
     {
-        $data = NguoiDung::paginate(10);
-        return view('nguoi_dung.index', compact('data'));
+        $nguoiDung = NguoiDung::orderBy('id', 'DESC')->get();
+        return view('nguoi_dung.index', compact('nguoiDung'));
     }
 
     public function create()
@@ -18,34 +18,45 @@ class NguoiDungController extends Controller
         return view('nguoi_dung.create');
     }
 
-    public function store(Request $request)
+    public function store(NguoiDungRequest $request)
     {
-        NguoiDung::create($request->all());
-        return redirect()->route('nguoi_dung.index');
-    }
+        $data = $request->validated();
 
-    public function show($id)
-    {
-        $item = NguoiDung::findOrFail($id);
-        return view('nguoi_dung.show', compact('item'));
+        // mật khẩu tự mã hoá nhờ mutator trong Model
+        NguoiDung::create($data);
+
+        return redirect()->route('nguoi_dung.index')
+                         ->with('success', 'Thêm người dùng thành công!');
     }
 
     public function edit($id)
     {
-        $item = NguoiDung::findOrFail($id);
-        return view('nguoi_dung.edit', compact('item'));
+        $nguoiDung = NguoiDung::findOrFail($id);
+        return view('nguoi_dung.edit', compact('nguoiDung'));
     }
 
-    public function update(Request $request, $id)
+    public function update(NguoiDungRequest $request, $id)
     {
-        $item = NguoiDung::findOrFail($id);
-        $item->update($request->all());
-        return redirect()->route('nguoi_dung.index');
+        $nguoiDung = NguoiDung::findOrFail($id);
+
+        $data = $request->validated();
+
+        // Nếu mật khẩu để trống → không cập nhật
+        if (empty($data['mat_khau'])) {
+            unset($data['mat_khau']);
+        }
+
+        $nguoiDung->update($data);
+
+        return redirect()->route('nguoi_dung.index')
+                         ->with('success', 'Cập nhật thành công!');
     }
 
     public function destroy($id)
     {
-        NguoiDung::destroy($id);
-        return redirect()->route('nguoi_dung.index');
+        NguoiDung::findOrFail($id)->delete();
+
+        return redirect()->route('nguoi_dung.index')
+                         ->with('success', 'Xóa người dùng thành công!');
     }
 }

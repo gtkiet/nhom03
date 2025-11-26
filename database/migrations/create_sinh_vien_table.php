@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('dia_chi', 255)->nullable();
             $table->string('anh_dai_dien', 255)->nullable();
 
-            $table->foreignId('id_nguoi_dung')
+            $table->foreignId('user_id')
                 ->nullable()
-                ->constrained('nguoi_dung')
+                ->constrained('users')
                 ->nullOnDelete();
 
             $table->foreignId('id_lop_hoc')

@@ -1,0 +1,87 @@
+create_dang_ky_hoc_table.php
+public function up()
+{
+    Schema::create('dang_ky_hoc', function (Blueprint $table) {
+        $table->id();
+
+        $table->foreignId('id_sinh_vien')
+              ->constrained('sinh_vien')
+              ->cascadeOnDelete();
+
+        $table->foreignId('id_lop_mon_hoc')
+              ->constrained('lop_mon_hoc')
+              ->cascadeOnDelete();
+
+        $table->timestamp('ngay_dang_ky')->useCurrent();
+        $table->enum('trang_thai', ['da_dang_ky', 'huy'])
+              ->default('da_dang_ky');
+
+        $table->string('ghi_chu', 255)->nullable();
+
+        $table->unique(['id_sinh_vien', 'id_lop_mon_hoc']);
+
+        $table->timestamps();
+    });
+}
+
+create_diem_danh_table.php
+public function up()
+{
+    Schema::create('diem_danh', function (Blueprint $table) {
+        $table->id();
+
+        $table->foreignId('id_sinh_vien')
+              ->constrained('sinh_vien')
+              ->cascadeOnDelete();
+
+        $table->foreignId('id_lop_mon_hoc')
+              ->constrained('lop_mon_hoc')
+              ->cascadeOnDelete();
+
+        $table->date('ngay_hoc');
+        $table->enum('trang_thai', ['co_mat', 'vang', 'di_tre']);
+        $table->string('ghi_chu', 255)->nullable();
+
+        $table->unique(['id_sinh_vien', 'id_lop_mon_hoc', 'ngay_hoc']);
+
+        $table->timestamps();
+    });
+}
+
+create_lop_mon_hoc_table.php
+public function up()
+{
+    Schema::create('lop_mon_hoc', function (Blueprint $table) {
+        $table->id();
+
+        $table->foreignId('id_mon_hoc')
+              ->constrained('mon_hoc')
+              ->cascadeOnDelete();
+
+        $table->string('ten_lop_mon', 100)->nullable();
+        $table->string('hoc_ky', 20)->nullable();
+        $table->string('nam_hoc', 20)->nullable();
+        $table->string('giang_vien', 100)->nullable();
+        $table->string('lich_hoc', 255)->nullable();
+        $table->string('phong_hoc', 50)->nullable();
+
+        $table->date('ngay_bat_dau')->nullable();
+        $table->date('ngay_ket_thuc')->nullable();
+
+        $table->timestamps();
+    });
+}
+
+create_nguoi_dung_table.php
+public function up()
+{
+    Schema::create('nguoi_dung', function (Blueprint $table) {
+        $table->id();
+        $table->string('ho_ten', 100);
+        $table->string('email', 100)->unique();
+        $table->string('mat_khau', 255);
+        $table->enum('vai_tro', ['admin', 'sinh_vien'])->default('sinh_vien');
+        $table->enum('trang_thai', ['hoat_dong', 'khoa'])->default('hoat_dong');
+        $table->timestamps();
+    });
+}
