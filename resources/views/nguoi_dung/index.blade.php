@@ -5,6 +5,11 @@
         <h3>Danh sách Người dùng</h3>
         <a href="{{ route('nguoi_dung.create') }}" class="btn btn-primary">Thêm mới</a>
     </div>
+    <form action="{{ route('nguoi_dung.index') }}" method="GET" class="mb-3 d-flex" style="max-width: 400px;">
+        <input type="text" name="keyword" class="form-control" placeholder="Tìm theo tên hoặc email..."
+            value="{{ request('keyword') }}">
+        <button class="btn btn-secondary ms-2">Search</button>
+    </form>
 
     <table class="table table-bordered">
         <thead>
@@ -40,4 +45,7 @@
             @endforeach
         </tbody>
     </table>
+    <div style="margin-top:12px">
+        {{ $nguoiDung->links('components.pagination') }}
+    </div>
 @endsection

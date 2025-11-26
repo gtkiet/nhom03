@@ -4,14 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\NguoiDung;
 use App\Http\Requests\NguoiDungRequest;
+use Illuminate\Http\Request;
 
 class NguoiDungController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $nguoiDung = NguoiDung::orderBy('id', 'DESC')->get();
+        $keyword = $request->keyword;
+
+        $nguoiDung = NguoiDung::when($keyword, function ($query, $keyword) {
+            return $query->where('ho_ten', 'LIKE', "%{$keyword}%")
+                ->orWhere('email', 'LIKE', "%{$keyword}%");
+        })
+            ->orderBy('id', 'DESC')
+            ->paginate(10)
+            ->withQueryString();
         return view('nguoi_dung.index', compact('nguoiDung'));
     }
+
 
     public function create()
     {
@@ -26,7 +36,7 @@ class NguoiDungController extends Controller
         NguoiDung::create($data);
 
         return redirect()->route('nguoi_dung.index')
-                         ->with('success', 'Thêm người dùng thành công!');
+            ->with('success', 'Thêm người dùng thành công!');
     }
 
     public function edit($id)
@@ -49,7 +59,7 @@ class NguoiDungController extends Controller
         $nguoiDung->update($data);
 
         return redirect()->route('nguoi_dung.index')
-                         ->with('success', 'Cập nhật thành công!');
+            ->with('success', 'Cập nhật thành công!');
     }
 
     public function destroy($id)
@@ -57,6 +67,6 @@ class NguoiDungController extends Controller
         NguoiDung::findOrFail($id)->delete();
 
         return redirect()->route('nguoi_dung.index')
-                         ->with('success', 'Xóa người dùng thành công!');
+            ->with('success', 'Xóa người dùng thành công!');
     }
 }
