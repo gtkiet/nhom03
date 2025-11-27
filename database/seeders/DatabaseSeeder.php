@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LopHocSeeder::class,
         ]);
+        $this->call(DemoUserSeeder::class);
     }
 }

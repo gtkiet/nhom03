@@ -11,18 +11,20 @@ class LopHocController extends Controller
     {
         $query = LopHoc::query();
 
-        if ($request->keyword) {
-            $query->where('ma_lop', 'like', "%{$request->keyword}%")
-                ->orWhere('ten_lop', 'like', "%{$request->keyword}%");
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('ma_lop', 'like', "%{$keyword}%")
+                  ->orWhere('ten_lop', 'like', "%{$keyword}%");
+            });
         }
 
         $lopHoc = $query->orderBy('id', 'ASC')
-            ->paginate(10)
-            ->withQueryString();
+                        ->paginate(10)
+                        ->withQueryString();
 
         return view('lop_hoc.index', compact('lopHoc'));
     }
-
 
     public function create()
     {
@@ -31,8 +33,11 @@ class LopHocController extends Controller
 
     public function store(Request $request)
     {
-        LopHoc::create($request->all());
-        return redirect()->route('lop_hoc.index');
+        $data = $request->all();
+
+        LopHoc::create($data);
+
+        return redirect()->route('lop_hoc.index')->with('success', 'Thêm thành công');
     }
 
     public function show($id)
@@ -49,14 +54,19 @@ class LopHocController extends Controller
 
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
         $item = LopHoc::findOrFail($id);
-        $item->update($request->all());
-        return redirect()->route('lop_hoc.index');
+        $item->update($data);
+
+        return redirect()->route('lop_hoc.index')->with('success', 'Cập nhật thành công');
     }
 
     public function destroy($id)
     {
-        LopHoc::destroy($id);
-        return redirect()->route('lop_hoc.index');
+        $item = LopHoc::findOrFail($id);
+        $item->delete();
+
+        return redirect()->route('lop_hoc.index')->with('success', 'Xóa thành công');
     }
 }

@@ -13,7 +13,7 @@ class LopHoc extends Model
         'ten_lop',
         'khoa',
         'khoa_hoc',
-        'co_van_hoc_tap',
+        'giao_vien_chu_nhiem',
     ];
 
     // 1 lớp có nhiều sinh viên

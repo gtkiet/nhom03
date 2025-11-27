@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         if ($user && $request->password === $user->mat_khau) {
             Auth::login($user);
-            return redirect('/');
+            return redirect('/home');
         }
 
         return back()->withErrors(['email' => 'Sai email hoặc mật khẩu']);
