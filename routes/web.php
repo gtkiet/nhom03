@@ -8,7 +8,7 @@ use App\Http\Controllers\LopHocController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
 
 Route::get('/dashboard', function () {

@@ -35,8 +35,15 @@
               <a class="nav-link text-warning" href="#">{{ Auth::user()->name ?? 'User' }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-danger" href="/logout">Đăng xuất</a>
+              <a class="nav-link text-danger" href="#"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Đăng xuất
+              </a>
             </li>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
           @else
             <li class="nav-item">
               <a class="nav-link text-info" href="/login">Đăng nhập</a>
